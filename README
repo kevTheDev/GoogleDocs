@@ -1,0 +1,29 @@
+#=GoogleDocs
+#
+#==Introduction
+# GoogleDocs is a full featured wrapper for version 3.0 of the Google Documents API (aka DocList).  GoogleDocs provides the ability
+# to create, update and delete google documents, metadata and content.  The gem also includes support for folders, modifying
+# permissions for documents via ACL feeds, and much more.
+#
+#
+# GoogleDocs is based on the GDocs4Ruby Gem see http://cookingandcoding.com/gdocs4ruby
+# GoogleDocs uses the GData4Ruby Gem for interacting with the Google API.  Check out http://cookingandcoding.com/gdata4ruby for 
+# other Google API Libraries based using GData4Ruby.
+# 
+# ==Author and Contact Information
+# GoogleDocs was created and is maintained by {Mike Reich}[mailto:mike@seabourneconsulting.com] 
+# and is licenses under the GPL v2.  Feel free to use and update, but be sure to contribute your
+# code back to the project and attribute as required by the license.
+# ===Website
+# http://cookingandcoding.com/gdocs4ruby/
+#
+# ==Description
+# GoogleDocs includes the following classes: Service, Folder, BaseObject, Spreadsheet, Document, Presentation.
+# 
+# The Service object provides functionality for authenticating with the Google Documents API, grabbing a list of 
+# documents and a list of folders associated with the account.
+# 
+# Interacting with objects is done by using the associated subclass of BaseObject, i.e. Document.  Every object
+# class supports the same inherited methods for creating, updating and deleting, in addition to changing
+# ACL permissions, and adding and removing from various folders.
+#
