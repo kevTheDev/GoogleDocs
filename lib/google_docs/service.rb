@@ -18,8 +18,6 @@
 require 'gdocs4ruby/base_object'
 require 'gdocs4ruby/folder'
 require 'gdocs4ruby/document'
-require 'gdocs4ruby/spreadsheet'
-require 'gdocs4ruby/presentation'
 
 module GDocs4Ruby
 
@@ -83,6 +81,7 @@ FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder
       return folders
     end
     
+    # TODO - We want a folder / files hierarchy here
     #Returns an array of objects for each document in the account.  Note that this 
     #method will return all documents for the account, including documents contained in
     #subfolders.
@@ -97,10 +96,6 @@ FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder
         case obj.type
           when 'document'
             doc = Document.new(self)
-          when 'spreadsheet'
-            doc = Spreadsheet.new(self)
-          when 'presentation'
-            doc = Presentation.new(self)
           else
             doc = BaseObject.new(self)
         end

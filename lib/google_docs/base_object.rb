@@ -25,7 +25,7 @@ module GDocs4Ruby
   #All usages assume you've already authenticated with the service, and have a service object called
   #@service.  
   #*Note*: You probably don't want to instantiate a BaseObject directly, but rather use any of the subclasses
-  #Document, Spreadsheet, and Presentation
+  #Document
   #1. Create a new Document
   #    doc = BaseObject.new(@service)
   #    doc.title = 'Test Document'
@@ -360,12 +360,8 @@ module GDocs4Ruby
       case obj.type
         when 'document'
           doc = Document.new(service)
-        when 'spreadsheet'
-          doc = Spreadsheet.new(service)
         when 'folder'
           doc = Folder.new(service)
-        when 'presentation'
-          doc = Presentation.new(service)
         else
           doc = obj
       end

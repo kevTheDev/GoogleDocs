@@ -86,10 +86,6 @@ module GDocs4Ruby
         case obj.type
           when 'document'
             doc = Document.new(@service)
-          when 'spreadsheet'
-            doc = Spreadsheet.new(@service)
-          when 'presentation'
-            doc = Presentation.new(@service)
           when 'folder'
             doc = Folder.new(@service)
         end

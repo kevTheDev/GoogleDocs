@@ -18,7 +18,7 @@
 # http://cookingandcoding.com/gdocs4ruby/
 #
 # ==Description
-# GoogleDocs includes the following classes: Service, Folder, BaseObject, Spreadsheet, Document, Presentation.
+# GoogleDocs includes the following classes: Service, Folder, BaseObject, Document.
 # 
 # The Service object provides functionality for authenticating with the Google Documents API, grabbing a list of 
 # documents and a list of folders associated with the account.
