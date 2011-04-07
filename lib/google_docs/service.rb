@@ -4,31 +4,11 @@ require 'google_docs/document'
 
 module GoogleDocs
 
-# this feeds are for version 2.0 only
-#DOCUMENT_LIST_FEED = "https://docs.google.com/feeds/documents/private/full"
-#FOLDER_LIST_FEED = "http://docs.google.com/feeds/documents/private/full/-/folder?showfolders=true"
-
-
 DOCUMENT_UPLOAD_URI = "https://docs.google.com/feeds/default/private/full"
 
 DOCUMENT_LIST_FEED = "http://docs.google.com/feeds/default/private/full/-/document"
 FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder"
 
-  #The service class is the main handler for all direct interactions with the 
-  #Google Documents API.  A service represents a single user account.  Each user
-  #account can have multiple documents and folders.
-  #=Usage
-  #
-  #1. Authenticate
-  #    service = Service.new
-  #    service.authenticate("user@gmail.com", "password")
-  #
-  #2. Get Document List
-  #    documents = service.files
-  #
-  #3. Get Folder List
-  #    folders = serivce.folders
-  #
   class Service < GData4Ruby::Service    
     #Accepts an optional attributes hash for initialization values
     def initialize(attributes = {})
@@ -49,9 +29,8 @@ FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder
     #Returns an array of Folder objects for each folder associated with 
     #the authenticated account.
     def folders
-      if not @auth_token
-         raise NotAuthenticated
-      end
+      raise NotAuthenticated unless @auth_token
+
       ret = send_request(GData4Ruby::Request.new(:get, FOLDER_LIST_FEED))
       folders = []
       REXML::Document.new(ret.body).root.elements.each("entry"){}.map do |entry|
@@ -69,6 +48,8 @@ FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder
     #method will return all documents for the account, including documents contained in
     #subfolders.
     def files
+      raise NotAuthenticated unless @auth_token
+      
       contents = []
       ret = send_request(GData4Ruby::Request.new(:get, DOCUMENT_LIST_FEED))
       xml = REXML::Document.new(ret.body)
