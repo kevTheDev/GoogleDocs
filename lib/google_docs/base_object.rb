@@ -64,7 +64,7 @@ module GoogleDocs
     attr_accessor :logger
     
     #Creates a new BaseObject instance.  Requires a valid GData4Ruby::Service object.
-    def initialize(service, attributes = {})
+    def initialize(service, data, attributes = {})
       super(service, attributes)
       @xml = ENTRY_XML
       @folders = []
@@ -76,6 +76,8 @@ module GoogleDocs
       if defined?(Rails)
         self.logger = Rails.logger
       end
+      
+      load(data)
     end
     
     public

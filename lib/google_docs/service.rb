@@ -49,26 +49,22 @@ FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder
     #subfolders.
     def files
       raise NotAuthenticated unless @auth_token
+
+      files = []
       
-      contents = []
-      ret = send_request(GData4Ruby::Request.new(:get, DOCUMENT_LIST_FEED))
-      xml = REXML::Document.new(ret.body)
-      xml.root.elements.each('entry'){}.map do |ele|
-        ele = GData4Ruby::Utils::add_namespaces(ele)
-        obj = BaseObject.new(self)
-        obj.load(ele.to_s)
-        case obj.type
-          when 'document'
-            doc = Document.new(self)
-          else
-            doc = BaseObject.new(self)
-        end
-        if doc
-          doc.load(ele.to_s)
-          contents << doc
-        end
+      response = send_request(GData4Ruby::Request.new(:get, DOCUMENT_LIST_FEED))
+      xml = REXML::Document.new(response.body)
+      
+      xml.root.elements.each('entry'){}.map do |element|
+        element = GData4Ruby::Utils::add_namespaces(element)
+        object = BaseObject.new(self, element.to_s)
+        
+        # TODO - Here we should refactor so that we don't have to create a BaseObject before our final object
+        
+        files << Document.new(self, element.to_s) if object.type == 'document'
       end
-      return contents
+      
+      return files
     end
   end
 end

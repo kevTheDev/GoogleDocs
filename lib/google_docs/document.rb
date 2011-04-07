@@ -12,8 +12,8 @@ module GoogleDocs
     EXPORT_URI = 'https://docs.google.com/feeds/download/documents/Export'
     
     #Creates a new Document instance.  Requires a valid Service object.
-    def initialize(service, attributes = {})
-      super(service, attributes)
+    def initialize(service, data, attributes = {})
+      super(service, attributes, data)
       @xml = DOCUMENT_XML
     end
     
