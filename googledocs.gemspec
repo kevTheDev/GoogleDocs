@@ -9,6 +9,6 @@ Gem::Specification.new do |s|
    s.description = %q{GoogleDocs is a full featured wrapper for version 2.0 of the Google Documents API (aka DocList).  GoogleDocs provides the ability to create, update and delete google documents, metadata and content.  The gem also includes support for folders, modifying permissions for documents via ACL feeds, and much more.}
    s.files = ["README", "CHANGELOG", "lib/google_docs.rb", "lib/google_docs/service.rb", "lib/google_docs/folder.rb", "lib/google_docs/document.rb", "lib/google_docs/base_object.rb"]
    s.has_rdoc = true
-   s.test_files = ['test/unit.rb'] 
-   s.add_dependency('gdata4ruby', '>= 0.1.0')
+   s.test_files = ['test/unit.rb']
+   s.add_dependency('bundler')
 end 

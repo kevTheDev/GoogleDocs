@@ -1,0 +1,10 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    gdata4ruby (0.1.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  gdata4ruby (>= 0.1.0)
