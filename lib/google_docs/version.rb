@@ -1,3 +1,3 @@
-module Googledocs/
+module GoogleDocs
   VERSION = "0.0.1"
 end
