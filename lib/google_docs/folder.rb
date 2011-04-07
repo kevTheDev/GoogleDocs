@@ -1,35 +1,5 @@
-# Author:: Mike Reich (mike@seabourneconsulting.com)
-# Copyright:: Copyright (C) 2010 Mike Reich
-# License:: GPL v2
-#--
-# Licensed under the General Public License (GPL), Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#
-# Feel free to use and update, but be sure to contribute your
-# code back to the project and attribute as required by the license.
-#++
-module GDocs4Ruby
-  #The Document class represents a Google Documents Folder.
-  #=Usage
-  #Assumes a valid and authenticated @service object.
-  #1. Retrieving a list of folders
-  #    @service.folders
-  #
-  #2. Getting a list of files in a folder
-  #    @folder = @service.folders.first
-  #    @folder.files
-  #
-  #3. Getting a list of sub folders in a folder
-  #    @folder = @service.folders.first
-  #    @folder.sub_folders
-  #
+module GoogleDocs
+
   class Folder < BaseObject
       FOLDER_XML = '<?xml version="1.0" encoding="UTF-8"?>
 <atom:entry xmlns:atom="http://www.w3.org/2005/Atom">

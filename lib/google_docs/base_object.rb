@@ -1,60 +1,7 @@
-# Author:: Mike Reich (mike@seabourneconsulting.com)
-# Copyright:: Copyright (C) 2010 Mike Reich
-# License:: GPL v2
-#--
-# Licensed under the General Public License (GPL), Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#
-# Feel free to use and update, but be sure to contribute your
-# code back to the project and attribute as required by the license.
-#++
 require 'gdata4ruby/gdata_object'
 require 'gdata4ruby/acl/access_rule'
 
-module GDocs4Ruby
-  
-  #The base object class that includes all major methods for interacting with Google Documents API.
-  #=Usage
-  #All usages assume you've already authenticated with the service, and have a service object called
-  #@service.  
-  #*Note*: You probably don't want to instantiate a BaseObject directly, but rather use any of the subclasses
-  #Document
-  #1. Create a new Document
-  #    doc = BaseObject.new(@service)
-  #    doc.title = 'Test Document'
-  #    doc.content = '<h1>Test Content HTML</h1>'
-  #    doc.content_type = 'html'
-  #    doc.save
-  #
-  #2. Deleting a Document
-  #    doc = BaseObject.find(@service, {:id => @doc_id})
-  #    doc.delete
-  #
-  #3. Finding an existing Document by id
-  #    doc = BaseObject.find(@service, {:id => @doc_id})
-  #
-  #4. Full Text Query
-  #    doc = BaseObject.find(@service, 'content text')
-  #
-  #   or
-  #
-  #    doc = BaseObject.find(@service, {:query => 'content text'})
-  #
-  #5. Finding an Existing Document by Title
-  #    doc = BaseObject.find(@service, nil, 'any', {'title' => 'Test Document'})
-  #
-  #6. Updating a Document with Content from a Local File
-  #    doc = BaseObject.find(@service, {:id => @doc_id})
-  #    doc.title = 'New Title'
-  #    doc.local_file = '/path/to/some/file'
-  #    doc.save
+module GoogleDocs
   
   class BaseObject < GData4Ruby::GDataObject
     ENTRY_XML = '<atom:entry xmlns:atom="http://www.w3.org/2005/Atom">
@@ -333,13 +280,13 @@ module GDocs4Ruby
     
     #Adds the object to the specified folder.  The parameter must be a valid Folder object.
     def add_to_folder(folder)
-      raise ArgumentError, 'folder must be a GDocs4Ruby::Folder' if not folder.is_a? Folder
+      raise ArgumentError, 'folder must be a GoogleDocs::Folder' if not folder.is_a? Folder
       @service.send_request(GData4Ruby::Request.new(:post, folder.content_uri, to_xml))
     end
     
     #Removes the object from the specified folder.  The parameter must be a valid Folder object.
     def remove_from_folder(folder)
-      raise ArgumentError, 'folder must be a GDocs4Ruby::Folder' if not folder.is_a? Folder
+      raise ArgumentError, 'folder must be a GoogleDocs::Folder' if not folder.is_a? Folder
       @service.send_request(GData4Ruby::Request.new(:delete, folder.content_uri+"/"+CGI::escape(id), nil, {"If-Match" => "*"}))
     end
     

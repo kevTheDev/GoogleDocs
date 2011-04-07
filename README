@@ -6,7 +6,7 @@
 # permissions for documents via ACL feeds, and much more.
 #
 #
-# GoogleDocs is based on the GDocs4Ruby Gem see http://cookingandcoding.com/gdocs4ruby
+# GoogleDocs is based on the GoogleDocs Gem see http://cookingandcoding.com/google_docs
 # GoogleDocs uses the GData4Ruby Gem for interacting with the Google API.  Check out http://cookingandcoding.com/gdata4ruby for 
 # other Google API Libraries based using GData4Ruby.
 # 
@@ -15,7 +15,7 @@
 # and is licenses under the GPL v2.  Feel free to use and update, but be sure to contribute your
 # code back to the project and attribute as required by the license.
 # ===Website
-# http://cookingandcoding.com/gdocs4ruby/
+# http://cookingandcoding.com/google_docs/
 #
 # ==Description
 # GoogleDocs includes the following classes: Service, Folder, BaseObject, Document.

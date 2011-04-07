@@ -1,25 +1,8 @@
-# Author:: Mike Reich (mike@seabourneconsulting.com)
-# Copyright:: Copyright (C) 2010 Mike Reich
-# License:: GPL v2
-#--
-# Licensed under the General Public License (GPL), Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#
-# Feel free to use and update, but be sure to contribute your
-# code back to the project and attribute as required by the license.
-#++
-require 'gdocs4ruby/base_object'
-require 'gdocs4ruby/folder'
-require 'gdocs4ruby/document'
+require 'google_docs/base_object'
+require 'google_docs/folder'
+require 'google_docs/document'
 
-module GDocs4Ruby
+module GoogleDocs
 
 # this feeds are for version 2.0 only
 #DOCUMENT_LIST_FEED = "https://docs.google.com/feeds/documents/private/full"
