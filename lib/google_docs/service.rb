@@ -2,12 +2,11 @@ require 'google_docs/base_object'
 require 'google_docs/folder'
 require 'google_docs/document'
 
+require 'google_docs/feed'
+
 module GoogleDocs
 
-DOCUMENT_UPLOAD_URI = "https://docs.google.com/feeds/default/private/full"
 
-DOCUMENT_LIST_FEED = "http://docs.google.com/feeds/default/private/full/-/document"
-FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder"
 
   class Service < GData4Ruby::Service    
     #Accepts an optional attributes hash for initialization values
@@ -52,7 +51,7 @@ FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder
 
       files = []
       
-      response = send_request(GData4Ruby::Request.new(:get, DOCUMENT_LIST_FEED))
+      response = send_request(files_request)
       xml = REXML::Document.new(response.body)
       
       xml.root.elements.each('entry'){}.map do |element|
@@ -65,6 +64,10 @@ FOLDER_LIST_FEED   = "http://docs.google.com/feeds/default/private/full/-/folder
       end
       
       return files
+    end
+    
+    def files_request
+      GData4Ruby::Request.new(:get, GoogleDocs::Feed.document_list_feed)
     end
   end
 end

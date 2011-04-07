@@ -15,10 +15,14 @@ Gem::Specification.new do |s|
   
   s.require_paths = ["lib"]
   
+  s.add_dependency 'gdata4ruby', '>= 0.1.0'
+  
+  
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'rr'
   s.add_development_dependency 'activesupport'
   s.add_development_dependency 'factory_girl'
   s.add_development_dependency 'forgery'
   s.add_development_dependency 'ruby-debug19'
+  s.add_development_dependency 'i18n'
 end

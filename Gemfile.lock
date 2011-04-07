@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     google_docs (0.0.1)
+      gdata4ruby (>= 0.1.0)
 
 GEM
   remote: http://rubygems.org/
@@ -37,7 +38,6 @@ DEPENDENCIES
   activesupport
   factory_girl
   forgery
-  gdata4ruby (>= 0.1.0)
   google_docs!
   i18n
   rr

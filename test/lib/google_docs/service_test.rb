@@ -1,16 +1,36 @@
 require 'test_helper'
 
-class ServiceTest < ActiveSupport::TestCase
-  
-  
-  context 'example' do
+
+
+module GoogleDocs
+
+  class ServiceTest < ActiveSupport::TestCase
     
-    should 'run' do
+    context 'files_request' do
       
-      assert true
+      setup do
+        @service = GoogleDocs::Service.new
+        @service.files_request
+      end
+      
+      before_should 'create a request object with DOCUMENT_LIST_FEED' do
+        mock(GoogleDocs::Feed).document_list_feed { 'DOCUMENT_LIST_FEED' }.once
+        mock(GData4Ruby::Request).new(:get, 'DOCUMENT_LIST_FEED') { '' }.once
+      end
+      
+      
     end
     
     
+    context 'files' do
+      
+      setup do
+      end
+      
+      
+      
+    end
+    
   end
-  
+
 end
