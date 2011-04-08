@@ -292,6 +292,8 @@ module GoogleDocs
       @service.send_request(GData4Ruby::Request.new(:delete, folder.content_uri+"/"+CGI::escape(id), nil, {"If-Match" => "*"}))
     end
     
+    
+    
     private
     
     def self.get_instance(service, d)

@@ -56,14 +56,28 @@ module GoogleDocs
       
       xml.root.elements.each('entry'){}.map do |element|
         element = GData4Ruby::Utils::add_namespaces(element)
-        object = BaseObject.new(self, element.to_s)
         
-        # TODO - Here we should refactor so that we don't have to create a BaseObject before our final object
-        
-        files << Document.new(self, element.to_s) if object.type == 'document'
+        object_type = find_object_type(element.to_s)
+        case object_type
+        when 'document'
+          files << Document.new(self, element.to_s) if object.type == 'document'
+        end
       end
       
       return files
+    end
+    
+    def find_object_type(data_string)
+      xml = REXML::Document.new(string)
+      xml.root.elements.each(){}.map do |element|
+        if element.name == 'category'
+          if element.attributes['scheme'] and element.attributes['scheme'] == 'http://schemas.google.com/g/2005#kind'
+            return element.attributes['label']
+          end
+        end
+      end
+      
+      raise UnknownObjectTypeError
     end
     
     def files_request
