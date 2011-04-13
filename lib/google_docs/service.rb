@@ -27,10 +27,19 @@ module GoogleDocs
       authenticate(@account, @password, service)
     end
     
+    # TODO - this should be moved up into the GData gem
+    def valid_auth_token?
+      !auth_token.blank?
+    end
+    
+    def check_authentication
+      raise GData4Ruby::NotAuthenticated unless valid_auth_token?
+    end
+    
     #Returns an array of Folder objects for each folder associated with 
     #the authenticated account.
     def folders
-      raise NotAuthenticated unless @auth_token
+      check_authentication
 
       ret = send_request(GData4Ruby::Request.new(:get, FOLDER_LIST_FEED))
       folders = []
@@ -44,41 +53,43 @@ module GoogleDocs
       return folders
     end
     
-    # TODO - We want a folder / files hierarchy here
-    #Returns an array of objects for each document in the account.  Note that this 
-    #method will return all documents for the account, including documents contained in
-    #subfolders.
-    def files
-      raise NotAuthenticated unless @auth_token
 
-      files = []
+    # returns all files, with no folder hierarchy
+    def files
+      check_authentication
+      xml = send_files_request
       
-      response = send_request(files_request)
-      xml = REXML::Document.new(response.body)
-      
-      xml.root.elements.each('entry'){}.map do |element|
-        element = GData4Ruby::Utils::add_namespaces(element)
-        
-        object_type = Service.find_entry_object_type(element.to_s)
-        case object_type
-        when 'document'
-          files << Document.new(self, element.to_s)
-        end
+      files = xml.search('/entry').each.inject([]) do |files, entry|
+        files << build_file(entry.inner_html)
       end
       
-      return files
+      files.compact
+    end
+    
+    # TODO - include support for other object types
+    def build_file(entry_xml_string)
+      object_type = Service.find_entry_object_type(entry_xml_string)
+      
+      if ['document'].include?(object_type) # TODO - we should use reflection here to keep the code small (when we add support for other object types)
+        Document.new(self, entry_xml_string)
+      end
     end
     
     def self.find_entry_object_type(entry_xml_string)
       xml = Hpricot(entry_xml_string)
       
       categories = xml.search("/entry//category[@scheme='http://schemas.google.com/g/2005#kind']")
-      return categories.first['label'] if categories.any?
-      nil
+      categories.any? ? categories.first['label'] : nil
     end
     
     def files_request
       GData4Ruby::Request.new(:get, GoogleDocs::Feed.document_list_feed)
     end
+    
+    def send_files_request
+      response = send_request(files_request)
+      Hpricot(response.body)
+    end
+    
   end
 end

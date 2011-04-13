@@ -6,6 +6,42 @@ module GoogleDocs
 
   class ServiceTest < ActiveSupport::TestCase
     
+    context 'valid_auth_token?' do
+      setup { @service = GoogleDocs::Service.new }
+      
+      should 'return false if auth_token returns nil' do
+        stub(@service).auth_token { nil }
+        assert_equal false, @service.valid_auth_token?
+      end
+      
+      should 'return false if auth_token returns empty string' do
+        stub(@service).auth_token { '' }
+        assert_equal false, @service.valid_auth_token?
+      end
+      
+      should 'return true  if auth_token returns a non-empty string' do
+        stub(@service).auth_token { 'ksdfhk' }
+        assert @service.valid_auth_token?
+      end
+    end
+    
+    context 'check_authentication' do
+      setup do
+        @service = GoogleDocs::Service.new
+      end
+      
+      should 'raise NotAuthenticated if valid_auth_token? returns false' do
+        stub(@service).valid_auth_token? { false }
+        assert_raise( GData4Ruby::NotAuthenticated) { @service.check_authentication }
+      end
+      
+      should 'not raise NotAuthenticated if valid_auth_token? returns true' do
+        stub(@service).valid_auth_token? { true }
+        assert_nothing_raised( GData4Ruby::NotAuthenticated) { @service.check_authentication }
+      end
+      
+    end
+    
     context 'files_request' do
       
       setup do
