@@ -1,8 +1,8 @@
 require 'google_docs/base_object'
 require 'google_docs/folder'
 require 'google_docs/document'
-
 require 'google_docs/feed'
+require 'google_docs/parser'
 
 require 'hpricot'
 
@@ -10,6 +10,8 @@ module GoogleDocs
 
   class UnknownObjectTypeError < StandardError; end #:nodoc: all
 
+
+  # TODO - figure out where check_authentication should be called - so as to only call it in a couple of places
   class Service < GData4Ruby::Service    
     #Accepts an optional attributes hash for initialization values
     def initialize(attributes = {})
@@ -44,22 +46,19 @@ module GoogleDocs
       response = send_request(files_request)
       Hpricot(response.body)
     end
-    
-    # TODO - include support for other object types
-    def build_file(entry_xml_string)
-      object_type = Service.entry_object_type(entry_xml_string)
+
+    # returns all files, with no folder hierarchy
+    def files
+      check_authentication
+      xml = send_files_request
       
-      if ['document'].include?(object_type) # TODO - we should use reflection here to keep the code small (when we add support for other object types)
-        Document.new(self, entry_xml_string)
+      files = xml.search('/entry').each.inject([]) do |files, entry|
+        files << Parser.build_file(entry.inner_html)
       end
+      
+      files.compact
     end
     
-    def self.entry_object_type(entry_xml_string)
-      xml = Hpricot(entry_xml_string)
-      
-      categories = xml.search("/entry//category[@scheme='http://schemas.google.com/g/2005#kind']")
-      categories.any? ? categories.first['label'] : nil
-    end
     
     #Returns an array of Folder objects for each folder associated with 
     #the authenticated account.
@@ -77,22 +76,6 @@ module GoogleDocs
       end
       return folders
     end
-    
-
-    # returns all files, with no folder hierarchy
-    def files
-      check_authentication
-      xml = send_files_request
-      
-      files = xml.search('/entry').each.inject([]) do |files, entry|
-        files << build_file(entry.inner_html)
-      end
-      
-      files.compact
-    end
-    
-    
-    
     
     
   end
