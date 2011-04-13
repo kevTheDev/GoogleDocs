@@ -3,12 +3,15 @@ require 'google_docs/folder'
 require 'google_docs/document'
 require 'google_docs/feed'
 require 'google_docs/parser'
+require 'google_docs/request_type'
 
 require 'hpricot'
 
 module GoogleDocs
 
   class UnknownObjectTypeError < StandardError; end #:nodoc: all
+  
+  class UnknownRequestType < StandardError; end
 
 
   # TODO - figure out where check_authentication should be called - so as to only call it in a couple of places
@@ -41,22 +44,15 @@ module GoogleDocs
     def files_request
       GData4Ruby::Request.new(:get, GoogleDocs::Feed.document_list_feed)
     end
-    
-    def send_files_request
-      response = send_request(files_request)
-      Hpricot(response.body)
-    end
 
     # returns all files, with no folder hierarchy
     def files
       check_authentication
-      xml = send_files_request
+      response = send_request(files_request)
       
-      files = xml.search('/entry').each.inject([]) do |files, entry|
-        files << Parser.build_file(entry.inner_html)
-      end
+      Parser.valid_response?(response)
       
-      files.compact
+      Parser.build_files(response)
     end
     
     

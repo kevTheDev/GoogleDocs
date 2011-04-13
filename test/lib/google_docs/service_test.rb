@@ -6,15 +6,20 @@ module GoogleDocs
 
   class ServiceTest < ActiveSupport::TestCase
     
-    context 'send_files_request' do
+    context 'files' do
       
-      setup { @service = GoogleDocs::Service.new }
-      
-      should 'return nil if the request response is nil' do
-        
+      setup do
+        @service = GoogleDocs::Service.new
+        stub(@service).valid_auth_token? { true }
       end
       
-      should 'create an Hpricot document if the response is not nil'
+      should 'raise HTTPRequestFailed if !valid_response?'
+      
+      should 'raise no error if valid_response?' do
+        stub(Parser).valid_response? { true }
+        assert_nothing_raised { @service.files }
+      end
+      
       
     end
     
@@ -49,7 +54,7 @@ module GoogleDocs
       
       should 'not raise NotAuthenticated if valid_auth_token? returns true' do
         stub(@service).valid_auth_token? { true }
-        assert_nothing_raised( GData4Ruby::NotAuthenticated) { @service.check_authentication }
+        assert_nothing_raised
       end
       
     end

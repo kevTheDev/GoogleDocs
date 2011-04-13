@@ -6,6 +6,37 @@ module GoogleDocs
 
   class ParserTest < ActiveSupport::TestCase
     
+    context 'response_valid?' do
+      
+      should 'return false if response.nil?' do
+        assert_equal false, Parser.response_valid?(nil, RequestType.get_all_files)
+      end
+      
+      should 'return false if response.empty?' do
+        assert_equal false, Parser.response_valid?('', RequestType.get_all_files)
+      end
+      
+      should 'raise error if the request_type is not recognized' do
+        assert_raise(UnknownRequestType) { Parser.response_valid?('response_string', 'UNKNOWN_REQUEST_TYPE') }
+      end
+      
+      should 'call appropriate response validation method' do
+        mock(Parser).get_all_files_response_valid? { true }.once
+        Parser.response_valid?('response_string', RequestType.get_all_files)
+      end
+        
+        
+        
+      
+    end
+    
+    context 'build_files' do
+      should 'return [] if response is empty'
+    end
+    
+    context 'build_file' do
+    end
+    
     context 'self.entry_object_type' do
       
       setup do
