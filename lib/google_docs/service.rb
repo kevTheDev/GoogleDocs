@@ -4,9 +4,11 @@ require 'google_docs/document'
 
 require 'google_docs/feed'
 
+require 'hpricot'
+
 module GoogleDocs
 
-
+  class UnknownObjectTypeError < StandardError; end #:nodoc: all
 
   class Service < GData4Ruby::Service    
     #Accepts an optional attributes hash for initialization values
@@ -57,27 +59,22 @@ module GoogleDocs
       xml.root.elements.each('entry'){}.map do |element|
         element = GData4Ruby::Utils::add_namespaces(element)
         
-        object_type = find_object_type(element.to_s)
+        object_type = Service.find_entry_object_type(element.to_s)
         case object_type
         when 'document'
-          files << Document.new(self, element.to_s) if object.type == 'document'
+          files << Document.new(self, element.to_s)
         end
       end
       
       return files
     end
     
-    def find_object_type(data_string)
-      xml = REXML::Document.new(string)
-      xml.root.elements.each(){}.map do |element|
-        if element.name == 'category'
-          if element.attributes['scheme'] and element.attributes['scheme'] == 'http://schemas.google.com/g/2005#kind'
-            return element.attributes['label']
-          end
-        end
-      end
+    def self.find_entry_object_type(entry_xml_string)
+      xml = Hpricot(entry_xml_string)
       
-      raise UnknownObjectTypeError
+      categories = xml.search("/entry//category[@scheme='http://schemas.google.com/g/2005#kind']")
+      return categories.first['label'] if categories.any?
+      nil
     end
     
     def files_request

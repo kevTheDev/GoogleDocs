@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
   
   s.add_dependency 'gdata4ruby', '>= 0.1.0'
-  
+  s.add_dependency 'hpricot',    '>= 0.8.4'
   
   s.add_development_dependency 'shoulda'
   s.add_development_dependency 'rr'
