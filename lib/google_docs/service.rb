@@ -36,6 +36,31 @@ module GoogleDocs
       raise GData4Ruby::NotAuthenticated unless valid_auth_token?
     end
     
+    def files_request
+      GData4Ruby::Request.new(:get, GoogleDocs::Feed.document_list_feed)
+    end
+    
+    def send_files_request
+      response = send_request(files_request)
+      Hpricot(response.body)
+    end
+    
+    # TODO - include support for other object types
+    def build_file(entry_xml_string)
+      object_type = Service.entry_object_type(entry_xml_string)
+      
+      if ['document'].include?(object_type) # TODO - we should use reflection here to keep the code small (when we add support for other object types)
+        Document.new(self, entry_xml_string)
+      end
+    end
+    
+    def self.entry_object_type(entry_xml_string)
+      xml = Hpricot(entry_xml_string)
+      
+      categories = xml.search("/entry//category[@scheme='http://schemas.google.com/g/2005#kind']")
+      categories.any? ? categories.first['label'] : nil
+    end
+    
     #Returns an array of Folder objects for each folder associated with 
     #the authenticated account.
     def folders
@@ -66,30 +91,9 @@ module GoogleDocs
       files.compact
     end
     
-    # TODO - include support for other object types
-    def build_file(entry_xml_string)
-      object_type = Service.find_entry_object_type(entry_xml_string)
-      
-      if ['document'].include?(object_type) # TODO - we should use reflection here to keep the code small (when we add support for other object types)
-        Document.new(self, entry_xml_string)
-      end
-    end
     
-    def self.find_entry_object_type(entry_xml_string)
-      xml = Hpricot(entry_xml_string)
-      
-      categories = xml.search("/entry//category[@scheme='http://schemas.google.com/g/2005#kind']")
-      categories.any? ? categories.first['label'] : nil
-    end
     
-    def files_request
-      GData4Ruby::Request.new(:get, GoogleDocs::Feed.document_list_feed)
-    end
     
-    def send_files_request
-      response = send_request(files_request)
-      Hpricot(response.body)
-    end
     
   end
 end

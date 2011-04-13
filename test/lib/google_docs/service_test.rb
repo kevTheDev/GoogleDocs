@@ -54,11 +54,13 @@ module GoogleDocs
         mock(GData4Ruby::Request).new(:get, 'DOCUMENT_LIST_FEED') { '' }.once
       end
       
-      
+      should 'return a GData4Ruby::Request object' do
+        assert_equal GData4Ruby::Request, @service.files_request.class
+      end
     end
     
     
-    context 'self.find_entry_object_type' do
+    context 'self.entry_object_type' do
       
       setup do
        @body =  "<entry gd:etag='&quot;BBEVVARCDit7ImBr&quot;'>
@@ -101,7 +103,7 @@ module GoogleDocs
       end
       
       should 'return an object_type of document' do
-        object_type = Service.find_entry_object_type(@body)
+        object_type = Service.entry_object_type(@body)
         assert_equal 'document', object_type
       end
     end
